@@ -51,4 +51,4 @@ router.post(
   createMovie,
 );
 
-module.exports.CardsRouter = router;
+module.exports.MoviesRouter = router;
