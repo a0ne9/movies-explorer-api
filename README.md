@@ -10,3 +10,9 @@
 
 `npm run start` — запускает сервер   
 `npm run dev` — запускает сервер с hot-reload
+
+## Ссылка на сервер 
+
+api.moviesexplorer.nomoredomains.xyz
+
+ip  сервера 158.160.3.94
