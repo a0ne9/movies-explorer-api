@@ -12,12 +12,7 @@ module.exports.createUser = (req, res, next) => {
     email,
     password,
   } = req.body;
-
-  if (!email || !password) {
-    throw new BadRequestError('Почта или пароль введены неверно!');
-  }
-
-  bcrypt.hash(req.body.password, 10).then((hash) => {
+  bcrypt.hash(password, 10).then((hash) => {
     User.create({
       name,
       email,
@@ -40,7 +35,7 @@ module.exports.createUser = (req, res, next) => {
         }
         next(err);
       });
-  }).catch((err) => next(err));
+  }).catch(next);
 };
 
 module.exports.updateUser = (req, res, next) => {
@@ -55,11 +50,13 @@ module.exports.updateUser = (req, res, next) => {
       if (!user) {
         throw new NotFoundError('Пользователь не найден!');
       }
-      res.status(200).send({ data: user });
+      res.send({ data: user });
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(new BadRequestError('Имя или о себе введены неверно!'));
+      } else if (err.name === 'MongoServerError' && err.code === 11000) {
+        next(new DuplicateError('Почта занята!'));
         return;
       }
       next(err);
@@ -86,9 +83,9 @@ module.exports.login = (req, res, next) => {
       });
     })
     .then((token) => {
-      res.status(200).send({ token });
+      res.send({ token });
     })
-    .catch((err) => next(err));
+    .catch(next);
 };
 
 module.exports.getExactUser = (req, res, next) => {
@@ -97,7 +94,7 @@ module.exports.getExactUser = (req, res, next) => {
       if (!user) {
         throw new NotFoundError('Пользователь с данным _id не найден!');
       }
-      res.status(200).send(user);
+      res.send(user);
     })
-    .catch((err) => next(err));
+    .catch(next);
 };

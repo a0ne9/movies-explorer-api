@@ -1,5 +1,7 @@
 const router = require('express').Router();
 const { celebrate, Joi } = require('celebrate');
+const { regex } = require('../utils/regex');
+
 const {
   getMovies,
   createMovie,
@@ -26,7 +28,7 @@ router.post(
       image: Joi.string()
         .required()
         .pattern(
-          /(http|www|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:~+#-]*[\w@?^=%&~+#-])/,
+          regex,
         ),
       country: Joi.string().required().min(2).max(30),
       director: Joi.string().required().min(2).max(30),
@@ -36,16 +38,15 @@ router.post(
       trailerLink: Joi.string()
         .required()
         .pattern(
-          /(http|www|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:~+#-]*[\w@?^=%&~+#-])/,
+          regex,
         ),
       nameEN: Joi.string().required().min(2).max(30),
       thumbnail: Joi.string()
         .required()
         .pattern(
-          /(http|www|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:~+#-]*[\w@?^=%&~+#-])/,
+          regex,
         ),
-      movieId: Joi.string().hex().length(24),
-      owner: Joi.string().hex().length(24),
+      movieId: Joi.number().required(),
     }),
   }),
   createMovie,

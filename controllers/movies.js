@@ -47,9 +47,9 @@ module.exports.createMovie = (req, res, next) => {
 module.exports.getMovies = (req, res, next) => {
   Movie.find({})
     .then((movies) => {
-      res.status(200).send(movies);
+      res.send(movies);
     })
-    .catch((err) => next(err));
+    .catch(next);
 };
 
 module.exports.deleteMovie = (req, res, next) => {
@@ -61,7 +61,7 @@ module.exports.deleteMovie = (req, res, next) => {
       if (req.user.id.toString() === movie.owner.toString()) {
         Movie.findByIdAndRemove(req.params.id)
           .then(() => {
-            res.status(200).send({ message: 'Фильм удален!' });
+            res.send({ message: 'Фильм удален!' });
           })
           .catch((err) => {
             if (err.name === 'CastError') {
@@ -74,5 +74,5 @@ module.exports.deleteMovie = (req, res, next) => {
       }
       throw new ForbiddenError('Вы не являетесь создателем этого фильма!');
     })
-    .catch((err) => next(err));
+    .catch(next);
 };

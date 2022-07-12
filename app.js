@@ -4,15 +4,16 @@ const mongoose = require('mongoose');
 const helmet = require('helmet');
 const cors = require('cors');
 const rateLimit = require('express-rate-limit');
-const { errors, celebrate, Joi } = require('celebrate');
-const { UserRouter } = require('./routes/users');
-const { MoviesRouter } = require('./routes/movies');
-const { createUser, login } = require('./controllers/users');
-const { isAuthorised } = require('./middlewares/isAuthorised');
+const { errors } = require('celebrate');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
-const NotFoundError = require('./errors/NotFoundError');
+const { appRouter } = require('./routes/index');
 
-const { PORT = 3001 } = process.env;
+const {
+  PORT = 3001,
+  MONGO_URL,
+  NODE_ENV,
+  DEFAULT_MONGO_URL = 'mongodb://localhost:27017/moviesdb',
+} = process.env;
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
@@ -20,42 +21,13 @@ const limiter = rateLimit({
 
 const app = express();
 app.use(express.json());
-mongoose.connect('mongodb://localhost:27017/bitfilmsdb');
+mongoose.connect(NODE_ENV === 'production' ? MONGO_URL : DEFAULT_MONGO_URL);
+app.use(requestLogger);
+app.use(limiter);
 app.use(cors());
 app.use(helmet());
-app.use(limiter);
-app.use(requestLogger);
 
-app.post(
-  '/signin',
-  celebrate({
-    body: Joi.object().keys({
-      email: Joi.string().required().email(),
-      password: Joi.string().required(),
-    }),
-  }),
-  login,
-);
-
-app.post(
-  '/signup',
-  celebrate({
-    body: Joi.object().keys({
-      email: Joi.string().required().email(),
-      password: Joi.string().required(),
-      name: Joi.string().min(2).max(30),
-    }),
-  }),
-  createUser,
-);
-
-app.use(isAuthorised);
-app.use('/', UserRouter);
-app.use('/', MoviesRouter);
-
-app.use('*', () => {
-  throw new NotFoundError('Страница не найдена!');
-});
+app.use(appRouter);
 
 app.use(errorLogger);
 
