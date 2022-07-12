@@ -25,4 +25,4 @@ router.post(
   createUser,
 );
 
-module.exports.AuthorisationRouter = router;
+module.exports = router;

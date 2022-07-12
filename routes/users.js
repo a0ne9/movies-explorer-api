@@ -5,10 +5,10 @@ const {
   getExactUser,
 } = require('../controllers/users');
 
-router.get('/users/me', getExactUser);
+router.get('/me', getExactUser);
 
 router.patch(
-  '/users/me',
+  '/me',
   celebrate({
     body: Joi.object().keys({
       name: Joi.string().required().min(2).max(30),
@@ -18,4 +18,4 @@ router.patch(
   updateUser,
 );
 
-module.exports.UserRouter = router;
+module.exports = router;

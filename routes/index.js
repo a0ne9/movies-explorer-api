@@ -1,9 +1,9 @@
 const router = require('express').Router();
 const NotFoundError = require('../errors/NotFoundError');
-const { UserRouter } = require('./users');
-const { AuthorisationRouter } = require('./authorization');
+const UserRouter = require('./users');
+const AuthorisationRouter = require('./authorization');
 const { isAuthorised } = require('../middlewares/isAuthorised');
-const { MoviesRouter } = require('./movies');
+const MoviesRouter = require('./movies');
 
 router.use('/', AuthorisationRouter);
 router.use(isAuthorised);
@@ -13,4 +13,4 @@ router.all('*', (res, req, next) => {
   next(new NotFoundError('Cтраницы не существует'));
 });
 
-module.exports.appRouter = router;
+module.exports = router;

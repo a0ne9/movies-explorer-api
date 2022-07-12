@@ -6,7 +6,7 @@ const cors = require('cors');
 const rateLimit = require('express-rate-limit');
 const { errors } = require('celebrate');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
-const { appRouter } = require('./routes/index');
+const appRouter = require('./routes/index');
 
 const {
   PORT = 3001,

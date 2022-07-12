@@ -9,7 +9,7 @@ const {
 } = require('../controllers/movies');
 
 router.delete(
-  '/movies/:id',
+  '/:id',
   celebrate({
     params: Joi.object().keys({
       id: Joi.string().hex().length(24),
@@ -18,10 +18,10 @@ router.delete(
   deleteMovie,
 );
 
-router.get('/movies', getMovies);
+router.get('/', getMovies);
 
 router.post(
-  '/movies',
+  '/',
   celebrate({
     body: Joi.object().keys({
       nameRU: Joi.string().required().min(2).max(30),
@@ -52,4 +52,4 @@ router.post(
   createMovie,
 );
 
-module.exports.MoviesRouter = router;
+module.exports = router;
