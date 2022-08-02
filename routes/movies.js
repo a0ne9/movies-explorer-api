@@ -24,14 +24,14 @@ router.post(
   '/',
   celebrate({
     body: Joi.object().keys({
-      nameRU: Joi.string().required().min(2).max(30),
+      nameRU: Joi.string().required().min(2),
       image: Joi.string()
         .required()
         .pattern(
           regex,
         ),
-      country: Joi.string().required().min(2).max(30),
-      director: Joi.string().required().min(2).max(30),
+      country: Joi.string().required().min(2),
+      director: Joi.string().required().min(2),
       duration: Joi.number().required(),
       year: Joi.string().required(),
       description: Joi.string().required(),
@@ -40,7 +40,7 @@ router.post(
         .pattern(
           regex,
         ),
-      nameEN: Joi.string().required().min(2).max(30),
+      nameEN: Joi.string().required().min(2),
       thumbnail: Joi.string()
         .required()
         .pattern(
