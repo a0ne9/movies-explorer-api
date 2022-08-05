@@ -6,12 +6,12 @@ const movieSchema = new mongoose.Schema(
     country: {
       type: String,
       required: true,
+      minlength: 2,
     },
     director: {
       type: String,
       required: true,
       minlength: 2,
-      maxlength: 30,
     },
     duration: {
       type: Number,
